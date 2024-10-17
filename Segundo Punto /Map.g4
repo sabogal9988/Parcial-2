@@ -1,48 +1,44 @@
 grammar Map;
 
-funcion:    map
-            |filter
-            ;
+// Reglas principales para funciones MAP y FILTER
+statement: map | filter;
 
-map: MAP '(' functionm ',' iterable ')';
-filter: FILTER '(' functionf ',' iterable ')';
+// Definición de la regla para MAP
+map: MAP '(' functionm ',' iterable ')' ;
 
-//funciones MAP
-functionm:  suma                    
-            |resta
-            |mult
-            |div
-            ;
+// Definición de la regla para FILTER
+filter: FILTER '(' functionf ',' iterable ')' ;
 
-//funciones FILTER
-functionf:  mayor
-            |menor
-            |igual
-            ;
+// Funciones MAP disponibles
+functionm: 'square'
+         | 'cube'
+         | 'increment'
+         | 'decrement'
+         ;
 
-iterable:   tupla
-            |lista
-            ;
+// Funciones FILTER disponibles
+functionf: 'even'
+         | 'odd'
+         | 'positive'
+         | 'negative'
+         ;
 
-suma: elemento '+';
-resta: elemento '-';
-mult: elemento '*' ;
-div: elemento '/';
+// Iterables que pueden ser tuplas o listas
+iterable: tupla | lista ;
 
-mayor: elemento '>';
-menor: elemento'<';
-igual: elemento '==';
-mayor_igual: elemento '>=';
-menor_igual: elemento '<=';
+// Definición de tuplas y listas
+tupla: '(' elemento (',' elemento)* ')' ;
+lista: '[' elemento (',' elemento)* ']' ;
 
-tupla: '(' elemento (',' elemento)* ')';
-lista: '[' elemento (',' elemento)* ']';
-
+// Un elemento es un número
 elemento: NUMERO ;
 
+// Definición de números
 NUMERO: ('0' | [1-9] [0-9]*) ;
 
-MAP: 'map';
-FILTER: 'filter';
+// Palabras reservadas
+MAP: 'MAP' ;
+FILTER: 'FILTER' ;
 
-WS: [ \t\r]+ -> skip;
+// Ignorar espacios en blanco
+WS: [ \t\r\n]+ -> skip ;
