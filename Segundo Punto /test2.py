@@ -1,7 +1,7 @@
 import sys
 from antlr4 import *
-from MapFilterLexer import MapFilterLexer
-from MapFilterParser import MapFilterParser
+from MapLexer import MapLexer
+from MapParser import MapParser
 
 # Clase para evaluar expresiones de MAP y FILTER
 class MapFilterEvaluator:
