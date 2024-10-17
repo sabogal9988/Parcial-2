@@ -6,21 +6,28 @@ statement: 'FOURIER' '(' exprList ')' # FourierTransform
          ;
 
 // Lista de expresiones que acepta múltiples expresiones separadas por comas
-exprList: expr (',' expr)*;
+exprList: expr (',' expr)* ;
 
 // Expresiones que pueden ser números reales, identificadores o algunas funciones comunes
 expr: REAL
     | IDENTIFIER
-    | 'rect' '(' 't' '/' 'T' ')' # Rectangular function
-    | 'tri' '(' 't' '/' 'T' ')' # Triangular function
-    | 'cos' '(' 'w0' ',' 't' ')' # Cosine function
-    | 'sin' '(' 'w0' ',' 't' ')' # Sine function
-    | 'delta' '(' 't' ')' # Delta function
+    | rect 
+    | tri
+    | cos
+    | sin
+    | delta
     ;
 
+// Definición de las funciones específicas
+rect: 'rect' '(' 't' '/' 'T' ')'; // Función rectangular
+tri: 'tri' '(' 't' '/' 'T' ')'; // Función triangular
+cos: 'cos' '(' 'w0' ',' 't' ')'; // Función coseno
+sin: 'sin' '(' 'w0' ',' 't' ')'; // Función seno
+delta: 'delta' '(' 't' ')'; // Función delta
+
 // Definición de identificadores y números reales
-IDENTIFIER: [a-zA-Z_][a-zA-Z_0-9]*;
-REAL: [0-9]+ ('.' [0-9]+)?;
+IDENTIFIER: [a-zA-Z_][a-zA-Z_0-9]* ;
+REAL: [0-9]+ ('.' [0-9]+)? ;
 
 // Ignorar espacios en blanco y tabulaciones
-WS: [ \t\r\n]+ -> skip;
+WS: [ \t\r\n]+ -> skip ;
