@@ -42,9 +42,10 @@ class EvalVisitor(OperacionesComplVisitor):
         elif ctx.BOOL():
             return True if ctx.getText() == 'true' else False
 
-def main(argv):
-    input_stream = FileStream(argv[1]) if len(argv) > 1 else InputStream(sys.stdin.read())
+def main():
+    expression = input("Ingrese una operación: ")
 
+    input_stream = InputStream(expression)
     lexer = OperacionesComplLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = OperacionesComplParser(stream)
@@ -52,7 +53,7 @@ def main(argv):
 
     visitor = EvalVisitor()
     result = visitor.visit(tree)
-    print("Result:", result)
+    print("Resultado:", result)
 
 if _name_ == '_main_':
-    main(sys.argv)
+    main()
