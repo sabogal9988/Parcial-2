@@ -2,9 +2,8 @@
 Configuración del Entorno
 Clonar el Repositorio
 
-git clone 
-- https://github.com/sabogal9988/Parcial-2
-cd Parcial-2
+git clone https://github.com/sabogal9988/Parcial-2
+- cd Parcial-2
 Crear un Entorno Virtual
 - python3 -m venv .venv
 Activar el Entorno Virtual
