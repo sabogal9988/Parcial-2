@@ -14,7 +14,7 @@ Esto generará varios archivos .py, incluyendo OperecionesComplLexer.py y Operec
 # Ejecución del parser
 Ejecuta el script de prueba con el siguiente comando:
 ```bash
-python3 test.py < input.txt
+python3 test.py
 ```
 # nota 
 Puedes editar input.txt para analizar diferentes expresiones complejas.
@@ -38,7 +38,7 @@ Esto generará varios archivos .py, incluyendo MapLexer.py y MapParser.py.
 # Ejecución del parser
 Ejecuta el script de prueba con el siguiente comando:
 ```bash
-python3 test2.py < input2.txt
+python3 test2.py
 ```
 # nota 
 Puedes editar input2.txt para analizar diferentes expresiones complejas.
@@ -62,7 +62,7 @@ Esto generará varios archivos .py, incluyendo TransformadaLexer.py y Transforma
 # Ejecución del parser
 Ejecuta el script de prueba con el siguiente comando:
 ```bash
-python3 test3.py < input3.txt
+python3 test3.py
 ```
 # nota 
 Puedes editar input3.txt para analizar diferentes expresiones complejas.
