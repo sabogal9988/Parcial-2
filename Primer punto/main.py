@@ -52,7 +52,7 @@ def main(argv):
 
     visitor = EvalVisitor()
     result = visitor.visit(tree)
-    print("El Resultado es:", result)
+    print("Result:", result)
 
 if _name_ == '_main_':
-    main(sys.argv)
+    main(sys.argv)
