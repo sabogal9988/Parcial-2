@@ -55,4 +55,4 @@ def main(argv):
     print("Result:", result)
 
 if _name_ == '_main_':
-    main(sys.argv)
+    main(sys.argv)
