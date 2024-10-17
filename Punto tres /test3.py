@@ -2,34 +2,68 @@ import sys
 from antlr4 import *
 from FourierTransformLexer import FourierTransformLexer
 from FourierTransformParser import FourierTransformParser
-import numpy as np
+from FourierTransformVisitor import FourierTransformVisitor
+import math
 
-class FourierEvaluator:
-    def visit(self, ctx):
-        # Extraer la lista de expresiones
-        values = self.extract_values(ctx.exprList)
-        # Calcular la transformada de Fourier
-        result = np.fft.fft(values)
-        return result
+# Visitante personalizado para evaluar transformadas de Fourier
+class FourierVisitor(FourierTransformVisitor):
+    
+    def visitFourierTransform(self, ctx:FourierTransformParser.FourierTransformContext):
+        exprs = self.visit(ctx.exprList())
+        return f"Transformada de Fourier: {exprs}"
+    
+    def visitInverseFourierTransform(self, ctx:FourierTransformParser.InverseFourierTransformContext):
+        exprs = self.visit(ctx.exprList())
+        return f"Transformada Inversa de Fourier: {exprs}"
+    
+    def visitExprList(self, ctx:FourierTransformParser.ExprListContext):
+        # Evaluar cada expresión en la lista de expresiones y unificar los resultados
+        return ", ".join([self.visit(expr) for expr in ctx.expr()])
 
-    def extract_values(self, expr_list_ctx):
-        values = []
-        for expr in expr_list_ctx.expr:
-            # Convertir cada expresión a un número flotante
-            values.append(float(expr.getText()))
-        return values
+    # Métodos para evaluar las funciones específicas
+    def visitRect(self, ctx:FourierTransformParser.RectContext):
+        return "T*sinc(T*(w/2π))"
+    
+    def visitTri(self, ctx:FourierTransformParser.TriContext):
+        return "T*sinc^2(T*(w/2π))"
+    
+    def visitCos(self, ctx:FourierTransformParser.CosContext):
+        return "π*δ(w-w0) + π*δ(w+w0)"
+    
+    def visitSin(self, ctx:FourierTransformParser.SinContext):
+        return "(π/j)*δ(w-w0) - (π/j)*δ(w+w0)"
+    
+    def visitDelta(self, ctx:FourierTransformParser.DeltaContext):
+        return "F[δ(t)]"
+    
+    def visitIdentifier(self, ctx:FourierTransformParser.IdentifierContext):
+        return ctx.getText()
 
-def main():
-    input_stream = InputStream(sys.stdin.read())
-    lexer = TransformadaLexer(input_stream)
+    def visitReal(self, ctx:FourierTransformParser.RealContext):
+        return ctx.getText()
+
+def calc(line) -> str:
+    input_stream = InputStream(line)
+
+    # Lexing
+    lexer = FourierTransformLexer(input_stream)
     stream = CommonTokenStream(lexer)
-    parser = TransformadaParser(stream)
+
+    # Parsing
+    parser = FourierTransformParser(stream)
     tree = parser.statement()
 
-    evaluator = FourierEvaluator()
-    result = evaluator.visit(tree)
-
-    print("Transformada de Fourier:", result)
+    # Utilizar el visitante personalizado para recorrer el AST
+    visitor = FourierVisitor()
+    return visitor.visit(tree)
 
 if __name__ == '__main__':
-    main()
+    while True:
+        print(">>> ", end='')
+        line = input()
+        if line.lower() == 'exit':
+            break
+        try:
+            print(calc(line))
+        except Exception as e:
+            print("Error:", e)
