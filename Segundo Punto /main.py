@@ -1,63 +1,76 @@
 from antlr4 import *
-from MapLexer import MapLexer
-from MapParser import MapParser
-from MapVisitor import MapVisitor  # Asumiendo que hay una clase base de visitante generada
+from FourierTransformLexer import FourierTransformLexer
+from FourierTransformParser import FourierTransformParser
+from FourierTransformVisitor import FourierTransformVisitor
+import math
 
-# Clase para evaluar expresiones de listas, tuplas y map
-class FuncVisitor(MapVisitor):
-    # Visit a parse tree produced by MapParser#elemento.
-    def visitElemento(self, ctx:MapParser.ElementoContext):
+# Visitante personalizado para evaluar transformadas de Fourier
+class FourierVisitor(FourierTransformVisitor):
+    
+    def visitFourierTransform(self, ctx:FourierTransformParser.FourierTransformContext):
+        exprs = self.visit(ctx.exprList())
 # Función recursiva para evaluar el árbol de sintaxis
 def evaluate(ctx):
-    if isinstance(ctx, MapParser.ElementoContext):
-# Asumiendo que un 'elemento' es un número
-return int(ctx.getText())
+    if isinstance(ctx, FourierTransformParser.FourierTransformContext):
+        exprs = evaluate(ctx.exprList())
+return f"Transformada de Fourier: {exprs}"
+
+    def visitInverseFourierTransform(self, ctx:FourierTransformParser.InverseFourierTransformContext):
+        exprs = self.visit(ctx.exprList())
+    elif isinstance(ctx, FourierTransformParser.InverseFourierTransformContext):
+        exprs = evaluate(ctx.exprList())
+return f"Transformada Inversa de Fourier: {exprs}"
+
+    def visitExprList(self, ctx:FourierTransformParser.ExprListContext):
+    elif isinstance(ctx, FourierTransformParser.ExprListContext):
+# Evaluar cada expresión en la lista de expresiones y unificar los resultados
+        return ", ".join([self.visit(expr) for expr in ctx.expr()])
+
+    # Métodos para evaluar las funciones específicas
+    def visitRect(self, ctx:FourierTransformParser.RectContext):
+        return ", ".join([evaluate(expr) for expr in ctx.expr()])
     
-    # Visit a parse tree produced by MapParser#tupla.
-    def visitTupla(self, ctx:MapParser.TuplaContext):
+    elif isinstance(ctx, FourierTransformParser.RectContext):
+return "T*sinc(T*(w/2π))"
 
-    elif isinstance(ctx, MapParser.TuplaContext):
-# Evalúa el contenido de la tupla, transformándolo en un objeto Python
-return eval(ctx.getText())
+    def visitTri(self, ctx:FourierTransformParser.TriContext):
+    elif isinstance(ctx, FourierTransformParser.TriContext):
+return "T*sinc^2(T*(w/2π))"
 
-    # Visit a parse tree produced by MapParser#lista.
-    def visitLista(self, ctx:MapParser.ListaContext):
-    elif isinstance(ctx, MapParser.ListaContext):
-# Evalúa el contenido de la lista, transformándolo en un objeto Python
-return eval(ctx.getText())
+    def visitCos(self, ctx:FourierTransformParser.CosContext):
+    elif isinstance(ctx, FourierTransformParser.CosContext):
+return "π*δ(w-w0) + π*δ(w+w0)"
 
-    # Visit a parse tree produced by MapParser#map.
-    def visitMap(self, ctx:MapParser.MapContext):
-    elif isinstance(ctx, MapParser.MapContext):
-# Simula el comportamiento de una función MAP en una lista
-function = ctx.function().getText()  # Obtener el texto de la función
-        iterable = self.visit(ctx.iterable())  # Visitar el iterable para obtener la lista
-        iterable = evaluate(ctx.iterable())  # Evaluar el iterable para obtener la lista
-print(f"Aplicando MAP con función '{function}' a: {iterable}")
-        return [self.simulate_function(function, x) for x in iterable]
-        return [simulate_function(function, x) for x in iterable]
+    def visitSin(self, ctx:FourierTransformParser.SinContext):
+    elif isinstance(ctx, FourierTransformParser.SinContext):
+return "(π/j)*δ(w-w0) - (π/j)*δ(w+w0)"
 
-    def simulate_function(self, function, x):
-        # Simulación de la función (puedes expandir esto según tus necesidades)
-        if function == "square":
-            return x ** 2
-        return x
-def simulate_function(function, x):
-    # Simulación de la función (puedes expandir esto según tus necesidades)
-    if function == "square":
-        return x ** 2
-    return x
+    def visitDelta(self, ctx:FourierTransformParser.DeltaContext):
+    elif isinstance(ctx, FourierTransformParser.DeltaContext):
+return "F[δ(t)]"
+
+    def visitIdentifier(self, ctx:FourierTransformParser.IdentifierContext):
+    elif isinstance(ctx, FourierTransformParser.IdentifierContext):
+return ctx.getText()
+
+    def visitReal(self, ctx:FourierTransformParser.RealContext):
+    
+    elif isinstance(ctx, FourierTransformParser.RealContext):
+return ctx.getText()
 
 # Función principal para leer la entrada y evaluar las expresiones
-def calc(line) -> float:
+def calc(line) -> str:
 input_stream = InputStream(line)
 
-@@ -46,9 +42,8 @@ def calc(line) -> float:
-parser = MapParser(stream)
-tree = parser.statement()  # Asumiendo que el punto de entrada de la gramática es 'statement'
+@@ -51,11 +49,10 @@ def calc(line) -> str:
+
+# Parsing
+parser = FourierTransformParser(stream)
+    tree = parser.statement()
+    tree = parser.statement()  # Asumiendo que el punto de entrada de la gramática es 'statement'
 
     # Utilizar el visitante personalizado para recorrer el AST
-    visitor = FuncVisitor()
+    visitor = FourierVisitor()
     return visitor.visit(tree)
     # Evaluar el árbol de forma recursiva
     return evaluate(tree)
