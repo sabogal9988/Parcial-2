@@ -21,7 +21,8 @@ Instalar las Dependencias
 1. Navega al directorio donde se encuentra OperacionesCompl.g4
 2. ejecutar el siguiente comando
 ```bash
-antlr4 -Dlanguage=Python3 -visitor OperacionesCompl.g4```
+antlr4 -Dlanguage=Python3 -visitor OperacionesCompl.g4
+```
 Esto generará varios archivos .py, incluyendo OperecionesComplLexer.py y OperecionesComplParser.py
 # Ejecución del parser
 Ejecuta el script de prueba con el siguiente comando:
