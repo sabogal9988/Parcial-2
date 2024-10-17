@@ -2,29 +2,32 @@ import sys
 from antlr4 import *
 from MapLexer import MapLexer
 from MapParser import MapParser
+from MapVisitor import MapVisitor  # Asumiendo que hay una clase base de visitante generada
 
-# Clase para evaluar expresiones de MAP y FILTER
-class MapFilterEvaluator:
+# Clase para evaluar expresiones de listas, tuplas y map
+class FuncVisitor(MapVisitor):
+    # Visit a parse tree produced by MapParser#elemento.
+    def visitElemento(self, ctx:MapParser.ElementoContext):
+        # Asumiendo que un 'elemento' es un número
+        return int(ctx.getText())
+    
+    # Visit a parse tree produced by MapParser#tupla.
+    def visitTupla(self, ctx:MapParser.TuplaContext):
+        # Evalúa el contenido de la tupla, transformándolo en un objeto Python
+        return eval(ctx.getText())
 
-    def visit(self, ctx):
-        if ctx.MapFunction():
-            function = ctx.function.getText()
-            iterable = self.visit(ctx.iterable)
-            return self.apply_map(function, iterable)
-        elif ctx.FilterFunction():
-            function = ctx.function.getText()
-            iterable = self.visit(ctx.iterable)
-            return self.apply_filter(function, iterable)
+    # Visit a parse tree produced by MapParser#lista.
+    def visitLista(self, ctx:MapParser.ListaContext):
+        # Evalúa el contenido de la lista, transformándolo en un objeto Python
+        return eval(ctx.getText())
 
-    def apply_map(self, function, iterable):
-        # Simulación de la aplicación de la función sobre el iterable
+    # Visit a parse tree produced by MapParser#map.
+    def visitMap(self, ctx:MapParser.MapContext):
+        # Simula el comportamiento de una función MAP en una lista
+        function = ctx.function().getText()  # Obtener el texto de la función
+        iterable = self.visit(ctx.iterable())  # Visitar el iterable para obtener la lista
         print(f"Aplicando MAP con función '{function}' a: {iterable}")
         return [self.simulate_function(function, x) for x in iterable]
-
-    def apply_filter(self, function, iterable):
-        # Simulación de la aplicación de la función condicional sobre el iterable
-        print(f"Aplicando FILTER con función '{function}' a: {iterable}")
-        return [x for x in iterable if self.simulate_condition(function, x)]
 
     def simulate_function(self, function, x):
         # Simulación de la función (puedes expandir esto según tus necesidades)
@@ -32,22 +35,28 @@ class MapFilterEvaluator:
             return x ** 2
         return x
 
-    def simulate_condition(self, function, x):
-        # Simulación de una condición (puedes expandir esto según tus necesidades)
-        if function == "even":
-            return x % 2 == 0
-        return True  # Por defecto, no filtra nada
+def calc(line) -> float:
+    input_stream = InputStream(line)
 
-def main():
-    input_stream = InputStream(sys.stdin.read())
+    # Lexing
     lexer = MapLexer(input_stream)
     stream = CommonTokenStream(lexer)
-    parser = MapParser(stream)
-    tree = parser.statement()
 
-    evaluator = MapFilterEvaluator()
-    result = evaluator.visit(tree)
-    print("Resultado:", result)
+    # Parsing
+    parser = MapParser(stream)
+    tree = parser.statement()  # Asumiendo que el punto de entrada de la gramática es 'statement'
+
+    # Utilizar el visitante personalizado para recorrer el AST
+    visitor = FuncVisitor()
+    return visitor.visit(tree)
 
 if __name__ == '__main__':
-    main()
+    while True:
+        print(">>> ", end='')
+        line = input()
+        if line.lower() == 'exit':
+            break
+        try:
+            print(calc(line))
+        except Exception as e:
+            print("Error:", e)
