@@ -2,23 +2,22 @@ import sys
 from antlr4 import *
 from OperacionesComplLexer import OperacionesComplLexer
 from OperacionesComplParser import OperacionesComplParser
-from OperacionesComplVisitor import OperacionesComplVisitor
 import cmath
 
-# Clase que hereda del visitante generado por ANTLR y evalúa expresiones
-class ComplexVisitor(OperacionesComplVisitor):
-    def visitAddSubExpr(self, ctx: OperacionesComplParser.AddSubExprContext):
-        left = self.visit(ctx.expr(0))
-        right = self.visit(ctx.expr(1))
+# Función recursiva para evaluar el árbol de sintaxis.
+def evaluate(ctx):
+    if isinstance(ctx, OperacionesComplParser.AddSubExprContext):
+        left = evaluate(ctx.expr(0))
+        right = evaluate(ctx.expr(1))
         op = ctx.op.text
         if op == '+':
             return left + right
         elif op == '-':
             return left - right
 
-    def visitMulDivExpr(self, ctx: OperacionesComplParser.MulDivExprContext):
-        left = self.visit(ctx.expr(0))
-        right = self.visit(ctx.expr(1))
+    elif isinstance(ctx, OperacionesComplParser.MulDivExprContext):
+        left = evaluate(ctx.expr(0))
+        right = evaluate(ctx.expr(1))
         op = ctx.op.text
         if op == '*':
             return left * right
@@ -28,18 +27,18 @@ class ComplexVisitor(OperacionesComplVisitor):
                 return 0
             return left / right
 
-    def visitAtomExpr(self, ctx: OperacionesComplParser.AtomExprContext):
+    elif isinstance(ctx, OperacionesComplParser.AtomExprContext):
         if 'i' in ctx.getText():  # Check if the atom is imaginary
             return complex(ctx.getText().replace('i', 'j'))  # Replace 'i' with 'j' for Python's complex numbers
         else:
             return complex(float(ctx.getText()), 0)
 
-    def visitParenExpr(self, ctx: OperacionesComplParser.ParenExprContext):
-        return self.visit(ctx.expr())
+    elif isinstance(ctx, OperacionesComplParser.ParenExprContext):
+        return evaluate(ctx.expr())
 
-    def visitComparisonExpr(self, ctx: OperacionesComplParser.ComparisonExprContext):
-        left = self.visit(ctx.expr(0))
-        right = self.visit(ctx.expr(1))
+    elif isinstance(ctx, OperacionesComplParser.ComparisonExprContext):
+        left = evaluate(ctx.expr(0))
+        right = evaluate(ctx.expr(1))
         op = ctx.op.text
         if op == '>':
             return left > right
@@ -50,37 +49,37 @@ class ComplexVisitor(OperacionesComplVisitor):
         elif op == '<=':
             return left <= right
 
-    def visitEqualityExpr(self, ctx: OperacionesComplParser.EqualityExprContext):
-        left = self.visit(ctx.expr(0))
-        right = self.visit(ctx.expr(1))
+    elif isinstance(ctx, OperacionesComplParser.EqualityExprContext):
+        left = evaluate(ctx.expr(0))
+        right = evaluate(ctx.expr(1))
         op = ctx.op.text
         if op == '==':
             return left == right
         elif op == '!=':
             return left != right
 
-    def visitNotExpr(self, ctx: OperacionesComplParser.NotExprContext):
-        operand = self.visit(ctx.expr())
+    elif isinstance(ctx, OperacionesComplParser.NotExprContext):
+        operand = evaluate(ctx.expr())
         return not operand
 
-    def visitAndExpr(self, ctx: OperacionesComplParser.AndExprContext):
-        left = self.visit(ctx.expr(0))
-        right = self.visit(ctx.expr(1))
+    elif isinstance(ctx, OperacionesComplParser.AndExprContext):
+        left = evaluate(ctx.expr(0))
+        right = evaluate(ctx.expr(1))
         return left and right
 
-    def visitOrExpr(self, ctx: OperacionesComplParser.OrExprContext):
-        left = self.visit(ctx.expr(0))
-        right = self.visit(ctx.expr(1))
+    elif isinstance(ctx, OperacionesComplParser.OrExprContext):
+        left = evaluate(ctx.expr(0))
+        right = evaluate(ctx.expr(1))
         return left or right
 
-    def visitNandExpr(self, ctx: OperacionesComplParser.NandExprContext):
-        left = self.visit(ctx.expr(0))
-        right = self.visit(ctx.expr(1))
+    elif isinstance(ctx, OperacionesComplParser.NandExprContext):
+        left = evaluate(ctx.expr(0))
+        right = evaluate(ctx.expr(1))
         return not (left and right)
 
-    def visitXorExpr(self, ctx: OperacionesComplParser.XorExprContext):
-        left = self.visit(ctx.expr(0))
-        right = self.visit(ctx.expr(1))
+    elif isinstance(ctx, OperacionesComplParser.XorExprContext):
+        left = evaluate(ctx.expr(0))
+        right = evaluate(ctx.expr(1))
         return left != right
 
 # Función principal para leer la entrada y evaluar las expresiones
@@ -95,9 +94,8 @@ def calc(line) -> float:
     parser = OperacionesComplParser(stream)
     tree = parser.expr()
 
-    # Utilizar el visitante personalizado para recorrer el AST
-    visitor = ComplexVisitor()
-    return visitor.visit(tree)
+    # Evaluar el árbol de forma recursiva
+    return evaluate(tree)
 
 if __name__ == '__main__':
     while True:
