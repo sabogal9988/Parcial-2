@@ -55,7 +55,7 @@ Puedes editar input2.txt para analizar diferentes expresiones complejas.
 1. Navega al directorio donde se encuentra Transformada.g4
 2. ejecutar el siguiente comando
 ```bash
-antlr4 -Dlanguage=Python3 Transformada.g4
+antlr4 -Dlanguage=Python3 FourierTransform.g4
 ```
 Esto generará varios archivos .py, incluyendo TransformadaLexer.py y TransformadaParser.py.
 
