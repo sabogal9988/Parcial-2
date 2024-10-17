@@ -1,8 +1,8 @@
 import sys
 from antlr4 import *
-from OperacionesComplLexer import OperacionesComplLexer
-from OperacionesComplParser import OperacionesComplParser
-from OperacionesComplVisitor import OperacionesComplVisitor
+from dist.OperacionesComplLexer import OperacionesComplLexer
+from dist.OperacionesComplParser import OperacionesComplParser
+from dist.OperacionesComplVisitor import OperacionesComplVisitor
 import cmath
 
 # Clase que hereda del visitante generado por ANTLR y evalúa expresiones
