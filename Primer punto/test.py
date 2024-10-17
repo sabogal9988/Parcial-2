@@ -1,7 +1,7 @@
 import sys
 from antlr4 import *
-from ComplexOperationsLexer import ComplexOperationsLexer
-from ComplexOperationsParser import ComplexOperationsParser
+from OperacionesComplLexer import OperacionesComplLexer
+from OperacionesComplParser import OperacionesComplParser
 
 # Clase para evaluar expresiones complejas
 class ComplexEvaluator:
