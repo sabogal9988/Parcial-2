@@ -1,4 +1,4 @@
-grammar Punto2;
+grammar Map;
 
 funcion:    map
             |filter
