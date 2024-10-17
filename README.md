@@ -2,19 +2,16 @@
 Configuración del Entorno
 Clonar el Repositorio
 
-git clone https://github.com/sabogal9988/Parcial-2
+git clone 
+- https://github.com/sabogal9988/Parcial-2
 cd Parcial-2
 Crear un Entorno Virtual
-
-python3 -m venv .venv
+- python3 -m venv .venv
 Activar el Entorno Virtual
-
-
-activar en Linux:
-source .venv/bin/activate
+- source .venv/bin/activate
 Instalar las Dependencias
-sudo pip install antlr4-python3-runtime==4.13.2
-sudo pip install numpy==2.1.2
+- sudo pip install antlr4-python3-runtime==4.13.2
+- sudo pip install numpy==2.1.2
 
 
 # Primer Punto 
