@@ -3,7 +3,6 @@
 ## archivos del punto 
 - OperacioneCompl.g4
 - test.py
-- input.txt
 # Generación del parser
 1. Navega al directorio donde se encuentra OperacionesCompl.g4
 2. ejecutar el siguiente comando
@@ -26,7 +25,6 @@ Puedes editar input.txt para analizar diferentes expresiones complejas.
 ## archivos del punto 
 - Map.g4 : Gramática para las funciones MAP
 - test2.py: Script para analizar expresiones con la gramática generada.
-- input2.txt :Archivo con ejemplos de uso de MAP
 # Generación del parser
 1. Navega al directorio donde se encuentra Map.g4
 2. ejecutar el siguiente comando
@@ -50,7 +48,6 @@ Puedes editar input2.txt para analizar diferentes expresiones complejas.
 ## archivos del punto 
 - Transformada.g4 : Gramática para el cálculo de la transformada de Fourier.
 - test3.py: Script para analizar expresiones con la gramática generada.
-- input3.txt :Archivo con ejemplos de listas para las que se calculará la transformada de Fourier.
 # Generación del parser
 1. Navega al directorio donde se encuentra Transformada.g4
 2. ejecutar el siguiente comando
