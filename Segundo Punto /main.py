@@ -10,17 +10,17 @@ def evaluate(ctx):
         return int(ctx.getText())
 
     elif isinstance(ctx, MapParser.TuplaContext):
-        # Evalúa el contenido de la tupla, transformándolo en un objeto Python
-        return eval(ctx.getText())
+        # Evalúa el contenido de la tupla
+        return [evaluate(e) for e in ctx.elemento()]
 
     elif isinstance(ctx, MapParser.ListaContext):
-        # Evalúa el contenido de la lista, transformándolo en un objeto Python
-        return eval(ctx.getText())
+        # Evalúa el contenido de la lista
+        return [evaluate(e) for e in ctx.elemento()]
 
     elif isinstance(ctx, MapParser.MapContext):
-        # Simula el comportamiento de una función MAP en una lista
-        function = ctx.function().getText()  # Obtener el texto de la función
-        iterable = evaluate(ctx.iterable())  # Evaluar el iterable para obtener la lista
+        # Simula el comportamiento de una función MAP en una lista o tupla
+        function = ctx.functionm().getText()  # Obtener el texto de la función
+        iterable = evaluate(ctx.iterable())  # Evaluar el iterable
         print(f"Aplicando MAP con función '{function}' a: {iterable}")
         return [simulate_function(function, x) for x in iterable]
 
@@ -28,6 +28,12 @@ def simulate_function(function, x):
     # Simulación de la función (puedes expandir esto según tus necesidades)
     if function == "square":
         return x ** 2
+    elif function == "cube":
+        return x ** 3
+    elif function == "increment":
+        return x + 1
+    elif function == "decrement":
+        return x - 1
     return x
 
 # Función principal para leer la entrada y evaluar las expresiones
