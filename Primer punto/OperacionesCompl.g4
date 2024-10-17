@@ -1,36 +1,32 @@
 grammar OperacionesCompl;
 
-expr: expr '+' expr      # Addition
-    | expr '-' expr      # Subtraction
-    | expr '*' expr      # Multiplication
-    | expr '/' expr      # Division
-    | '(' expr ')'       # ParenthesizedExpression
-    | COMPLEX            # ComplexNumber
-    | REAL               # RealNumber
-expr:  '(' expr ')'             # ParenExpr
-    |   '!' expr                 # NotExpr
-    |   atom                     # AtomExpr
-    |   expr op=('*'|'/') expr   # MulDivExpr
-    |   expr op=('+'|'-') expr   # AddSubExpr
-    |   expr op=('>'|'>='|'<'|'<=') expr  # ComparisonExpr
-    |   expr op=('=='|'!=') expr  # EqualityExpr
-    |   expr '&&' expr            # AndExpr
-    |   expr '||' expr            # OrExpr
-    |   expr '~' expr             # NandExpr
-    |   expr '?' expr             # XorExpr
-;
-
-COMPLEX: REAL ('+'|'-') REAL 'i';
-REAL: [0-9]+ ('.' [0-9]+)?;
-atom: INT
-    | IMAGINARY
-    | 'true'
-    | 'false'
+expr:  '(' expr ')'                # ParenExpr
+    |   '-' expr                   # NegExpr
+    |   '!' expr                   # NotExpr
+    |   atom                       # AtomExpr
+    |   expr op=('*'|'/') expr     # MulDivExpr
+    |   expr op=('+'|'-') expr     # AddSubExpr
+    |   expr op=('>'|'>='|'<'|'<=') expr  # CompExpr
+    |   expr op=('=='|'!=') expr   # EqualityExpr
+    |   expr '&&' expr             # AndExpr
+    |   expr '||' expr             # OrExpr
+    |   expr '~' expr              # NandExpr
+    |   expr '?' expr              # XorExpr
     ;
 
-WS: [ \t\r\n]+ -> skip;
-// tokens expressed as regular expressions
+atom: COMPLEX
+    | INT
+    | BOOL
+    ;
+
+COMPLEX: REAL_PART ( ('+'|'-')? IMAGINARY_PART )?
+       | IMAGINARY_PART
+       ;
+
+// tokens expresados como expresiones regulares
 INT : [0-9]+ ;
-IMAGINARY: REAL_PART 'i' ;
+IMAGINARY_PART: [0-9]* 'i' ;
 REAL_PART: [0-9]+ ('.' [0-9]+)? ;
-WS  : [ \t]+ -> skip ;
+BOOL: 'true' | 'false' ;
+
+WS  : [ \t\n\r]+ -> skip ;
