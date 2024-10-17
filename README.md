@@ -42,7 +42,7 @@ Puedes editar input.txt para analizar diferentes expresiones complejas.
 1. Navega al directorio donde se encuentra Map.g4
 2. ejecutar el siguiente comando
 ```bash
-antlr4 -Dlanguage=Python3 Map.g4
+antlr4 -Dlanguage=Python3 -visitor Map.g4
 ```
 Esto generará varios archivos .py, incluyendo MapLexer.py y MapParser.py.
 
@@ -65,7 +65,7 @@ Puedes editar input2.txt para analizar diferentes expresiones complejas.
 1. Navega al directorio donde se encuentra Transformada.g4
 2. ejecutar el siguiente comando
 ```bash
-antlr4 -Dlanguage=Python3 FourierTransform.g4
+antlr4 -Dlanguage=Python3 -visitor FourierTransform.g4
 ```
 Esto generará varios archivos .py, incluyendo TransformadaLexer.py y TransformadaParser.py.
 
