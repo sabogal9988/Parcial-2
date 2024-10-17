@@ -1,15 +1,48 @@
-grammar Map;
+grammar Punto2;
 
-statement: 'MAP' '(' function ',' iterable ')'    # MapFunction
-         | 'FILTER' '(' function ',' iterable ')' # FilterFunction
-         ;
+funcion:    map
+            |filter
+            ;
 
-function: IDENTIFIER;
-iterable: '[' exprList ']' | '(' exprList ')' | IDENTIFIER;
-exprList: expr (',' expr)*;
-expr: REAL | IDENTIFIER;
+map: MAP '(' functionm ',' iterable ')';
+filter: FILTER '(' functionf ',' iterable ')';
 
-IDENTIFIER: [a-zA-Z_][a-zA-Z_0-9]*;
-REAL: [0-9]+ ('.' [0-9]+)?;
+//funciones MAP
+functionm:  suma                    
+            |resta
+            |mult
+            |div
+            ;
 
-WS: [ \t\r\n]+ -> skip;
+//funciones FILTER
+functionf:  mayor
+            |menor
+            |igual
+            ;
+
+iterable:   tupla
+            |lista
+            ;
+
+suma: elemento '+';
+resta: elemento '-';
+mult: elemento '*' ;
+div: elemento '/';
+
+mayor: elemento '>';
+menor: elemento'<';
+igual: elemento '==';
+mayor_igual: elemento '>=';
+menor_igual: elemento '<=';
+
+tupla: '(' elemento (',' elemento)* ')';
+lista: '[' elemento (',' elemento)* ']';
+
+elemento: NUMERO ;
+
+NUMERO: ('0' | [1-9] [0-9]*) ;
+
+MAP: 'map';
+FILTER: 'filter';
+
+WS: [ \t\r]+ -> skip;
