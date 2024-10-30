@@ -58,7 +58,7 @@ def calc(line) -> str:
     return visitor.visit(tree)
 
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     while True:
         try:
             line = input("Ingrese una expresión: ")
