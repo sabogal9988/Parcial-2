@@ -41,7 +41,7 @@ def calc(line) -> float:
     visitor = FuncVisitor()
     return visitor.visit(tree)
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     while True:
         print(">>> ", end='')
         line = input()
