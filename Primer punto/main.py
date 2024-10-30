@@ -55,5 +55,5 @@ def main():
     result = visitor.visit(tree)
     print("Resultado:", result)
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     main()
